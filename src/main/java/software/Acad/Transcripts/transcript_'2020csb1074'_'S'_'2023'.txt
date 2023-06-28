@@ -1,0 +1,17 @@
+Student Name      : Arshdeep Singh
+Student ID        : 2020csb1074
+Student Department: CSE
+          Transcript of Semester S and Year 2023
+
+Course ID     : cs101
+Course Name   : Discrete Mathematics
+Course LTP    : 1-2-3
+Course Credits: 3
+Course Type   : Elective
+Grade         : A-
+
+
+SGPA: 9.0
+CGPA: 8.6
+
+Generated on: Thu Mar 09 04:33:24 IST 2023
