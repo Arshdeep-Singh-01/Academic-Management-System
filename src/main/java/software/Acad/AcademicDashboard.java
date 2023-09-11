@@ -6,18 +6,19 @@ import java.sql.Statement;
 import java.io.File;
 import java.io.FileWriter;
 
+import software.Dashboard;
 import software.student.Constants;
 import software.student.StudentDashboard;
 
 import java.util.Date;
 import java.util.Scanner;
 
-import javax.tools.FileObject;
 
-
-public class AcademicDashboard {
+public class AcademicDashboard implements Dashboard {
     private String currentACADYear;
     private String currentACADSemester;
+    
+    @Override
     public void main(Connection conn, String userID, Scanner sc) {
         if(userID.equals("dean")==false){
             System.out.println("You are not authorized to access this page");

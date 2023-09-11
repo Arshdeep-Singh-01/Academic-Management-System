@@ -12,6 +12,7 @@ import org.checkerframework.common.util.report.qual.ReportUnqualified;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import software.Dashboard;
 import software.Acad.acadVariables;
 
 /*
@@ -65,12 +66,73 @@ import software.Acad.acadVariables;
  * 
  */
 
-public class StudentDashboard {
+public class StudentDashboard implements Dashboard {
     private String currentSemester;
     private int currentYear;
     private int currentAcademicYear;
     public String semesterStatus;
-    
+
+    @Override
+    public void main(Connection conn ,String userID, Scanner sc){
+        acadVariables acadVar = new acadVariables(conn);
+        currentAcademicYear = Integer.parseInt(acadVar.getCURRENTYEAR());
+        currentSemester = acadVar.getCURRENTSEMESTER();
+        semesterStatus = acadVar.getSEMESTERSTATUS();
+
+        Constants constant = new Constants();
+
+        System.out.println();
+        int choice = 0;
+
+        // initializing the year and semester
+        this.currentYear = getYear(conn, userID); // [1,2,3,4]
+        if(this.currentYear < 0){
+            return;
+        }
+
+        while(true){
+            try {
+                System.out.println("\n-----------Welcome to Student Dashboard-----------");
+                System.out.println("Select: 1-Show Student Profile, 2-View Your Courses, 3-View Offered Courses,4-Enroll Courses, 5-Drop Courses, 6-Calculate CGPA, 7-Calculate SGPA, 8-Quit");
+                System.out.print("Enter your Choice: ");
+                choice = sc.nextInt();
+                sc.nextLine();
+                choice += 100; // adding 100 for ease
+                if(choice == constant.SHOW_STUDENT_PROFILE){
+                    this.studentProfile(conn,userID);
+                }
+                else if(choice == constant.VIEW_COURSES){
+                    this.viewCourses(conn,userID); // shows the courses that student is doing or have done
+                }
+                else if(choice == constant.VIEW_OFFERED_COURSES){
+                    this.viewOfferedCourses(conn,userID,sc);
+                }
+                else if(choice == constant.ENROLL_COURSES){
+                    this.enrollCourses(conn,userID,sc);
+                }
+                else if(choice == constant.DROP_COURSES){
+                    this.dropCourses(conn,userID,sc);
+                }
+                else if(choice == constant.CALCULATE_CGPA){
+                    this.calculateCGPA(conn,userID);
+                }
+                else if(choice == constant.CALCULATE_SGPA){
+                    this.calculateSGPA(conn, userID,sc);
+                }
+                else if(choice == constant.LOGOUT_STUDENT){
+                    System.out.println("Successfully Logged Out\n");
+                    break;
+                }
+                else{
+                    System.out.println("Invalid Choice: Enter 1, 2, 3, 4, 5, 6, 7 or 8");
+                }
+            } catch (Exception e) {
+                // handle exception
+                break;
+            }
+        }
+        // sc.close();
+    }
 
     private void studentProfile(Connection conn, String userID){
         Statement statement;
@@ -639,66 +701,5 @@ public class StudentDashboard {
         } catch (Exception e) {
             System.out.println("Error at Student> calculateSGPA: "+ e);
         }
-    }
-    // main function
-    public void main(Connection conn ,String userID, Scanner sc){
-        acadVariables acadVar = new acadVariables(conn);
-        currentAcademicYear = Integer.parseInt(acadVar.getCURRENTYEAR());
-        currentSemester = acadVar.getCURRENTSEMESTER();
-        semesterStatus = acadVar.getSEMESTERSTATUS();
-
-        Constants constant = new Constants();
-
-        System.out.println();
-        int choice = 0;
-
-        // initializing the year and semester
-        this.currentYear = getYear(conn, userID); // [1,2,3,4]
-        if(this.currentYear < 0){
-            return;
-        }
-
-        while(true){
-            try {
-                System.out.println("\n-----------Welcome to Student Dashboard-----------");
-                System.out.println("Select: 1-Show Student Profile, 2-View Your Courses, 3-View Offered Courses,4-Enroll Courses, 5-Drop Courses, 6-Calculate CGPA, 7-Calculate SGPA, 8-Quit");
-                System.out.print("Enter your Choice: ");
-                choice = sc.nextInt();
-                sc.nextLine();
-                choice += 100; // adding 100 for ease
-                if(choice == constant.SHOW_STUDENT_PROFILE){
-                    this.studentProfile(conn,userID);
-                }
-                else if(choice == constant.VIEW_COURSES){
-                    this.viewCourses(conn,userID); // shows the courses that student is doing or have done
-                }
-                else if(choice == constant.VIEW_OFFERED_COURSES){
-                    this.viewOfferedCourses(conn,userID,sc);
-                }
-                else if(choice == constant.ENROLL_COURSES){
-                    this.enrollCourses(conn,userID,sc);
-                }
-                else if(choice == constant.DROP_COURSES){
-                    this.dropCourses(conn,userID,sc);
-                }
-                else if(choice == constant.CALCULATE_CGPA){
-                    this.calculateCGPA(conn,userID);
-                }
-                else if(choice == constant.CALCULATE_SGPA){
-                    this.calculateSGPA(conn, userID,sc);
-                }
-                else if(choice == constant.LOGOUT_STUDENT){
-                    System.out.println("Successfully Logged Out\n");
-                    break;
-                }
-                else{
-                    System.out.println("Invalid Choice: Enter 1, 2, 3, 4, 5, 6, 7 or 8");
-                }
-            } catch (Exception e) {
-                // handle exception
-                break;
-            }
-        }
-        // sc.close();
     }
 }

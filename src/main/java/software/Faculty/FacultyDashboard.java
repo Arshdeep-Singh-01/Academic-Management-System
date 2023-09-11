@@ -1,5 +1,6 @@
 package software.Faculty;
 
+import software.Dashboard;
 import software.Acad.acadVariables;
 import software.student.Constants;
 
@@ -12,12 +13,13 @@ import java.io.FileReader;
 import java.io.IOException;
 
 
-public class FacultyDashboard {
+public class FacultyDashboard implements Dashboard {
     // Academic Variables
     String year = "";
     String semester = "";
     String semesterStatus = "";
     
+    @Override
     public void main(Connection conn, String userID,Scanner sc){
         if(isFaculty(conn,userID)==false){
             System.out.println("You are not a Faculty");
